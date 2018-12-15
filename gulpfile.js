@@ -7,7 +7,8 @@ var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var watch = require('gulp-watch');
 var del = require('del');
-gulp.task('default',['minijs','sass','minihtml','watch','connect']);
+var miniimg = require('gulp-imagemin');
+gulp.task('default',['minijs','sass','miniimg','minihtml','watch','connect']);
 gulp.task('sass', function () {
     gulp.src('./app/static/sass/*.scss')
     .pipe(sass().on('error', sass.logError))
@@ -29,6 +30,12 @@ gulp.task('minijs', function () {
     .pipe(gulp.dest('dist/js'))
     .pipe(connect.reload());
 });
+gulp.task('miniimg',function(){
+    gulp.src('./app/static/images/*.*')
+        .pipe(miniimg())
+        .pipe(gulp.dest('dist/images'))
+        .pipe(connect.reload())
+})
 gulp.task('connect', function() {
   connect.server({
   	root:'./dist',
@@ -39,6 +46,7 @@ gulp.task('connect', function() {
 gulp.task('watch',function(){
 	gulp.watch('./app/static/sass/*.scss',['sass']);
 	gulp.watch('./app/static/js/*.js',['minijs']);
+	gulp.watch('./app/static/images/*.*',['miniimg']);
 	gulp.watch('./*.html',['minihtml']);
 });
 gulp.task('clean', function () {
