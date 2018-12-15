@@ -7,8 +7,17 @@ var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var watch = require('gulp-watch');
 var del = require('del');
+var run = require('run-sequence');
 var miniimg = require('gulp-imagemin');
-gulp.task('default',['minijs','sass','miniimg','minihtml','watch','connect']);
+gulp.task('default',function(callback){
+	run(
+		['sass','minijs','miniimg'],
+		'minihtml',
+		'watch',
+		'connect',
+		callback
+	);
+});
 gulp.task('sass', function () {
     gulp.src('./app/static/sass/*.scss')
     .pipe(sass().on('error', sass.logError))
